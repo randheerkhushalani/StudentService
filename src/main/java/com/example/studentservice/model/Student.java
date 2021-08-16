@@ -1,20 +1,33 @@
 package com.example.studentservice.model;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Student {
 	@Id
 	@GeneratedValue
 	private int id;
+	@NotBlank(message="first name should have atleast one character")
 	private String firstName;
+	@NotBlank(message="last name shoukd have atleast one character")
 	private String lastName;
+	@Size(min=6,message="Passport number should be of atleast 6 characters")
+	@Pattern(regexp ="RT[0-9]{4}")
 	private String passportNumber;
-	private Double gradePoints;
+	@DecimalMin(value = "4.5", message="Grade Points should be greater than 4.5")
+	@DecimalMax(value = "10.0", message="Grade Points should be less than or equal to 10.0")
+	private BigDecimal gradePoints;
 	private String branch;
-	public Student(int id, String firstName, String lastName, String passportNumber, Double gradePoints, String branch) {
+	public Student(int id, String firstName, String lastName, String passportNumber, BigDecimal gradePoints, String branch) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -51,10 +64,10 @@ public class Student {
 	public void setPassportNumber(String passportNumber) {
 		this.passportNumber = passportNumber;
 	}
-	public Double getGradePoints() {
+	public BigDecimal getGradePoints() {
 		return gradePoints;
 	}
-	public void setGradePoints(Double gradePoints) {
+	public void setGradePoints(BigDecimal gradePoints) {
 		this.gradePoints = gradePoints;
 	}
 	public String getBranch() {

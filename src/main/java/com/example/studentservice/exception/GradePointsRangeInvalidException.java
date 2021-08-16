@@ -1,13 +1,13 @@
 package com.example.studentservice.exception;
 
-public class StudentNotFoundException extends RuntimeException {
+public class GradePointsRangeInvalidException extends RuntimeException {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1615119236906423787L;
 
-	public StudentNotFoundException(String exception) {
+	public GradePointsRangeInvalidException(String exception) {
 		super(exception);
 	}
 

@@ -2,11 +2,17 @@ package com.example.studentservice.controller;
 
 
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +29,7 @@ import com.example.studentservice.service.StudentService;
 
 @RestController
 @RequestMapping(path = "/students")
+@Validated
 public class StudentController {
 	@Autowired
 	private StudentRepository studentRepo;
@@ -31,14 +38,14 @@ public class StudentController {
 	private StudentService studentService;
 
 	@PostMapping
-	public ResponseEntity<Student> addStudent( @RequestBody Student student) {
+	public ResponseEntity<Student> addStudent( @Valid @RequestBody Student student) {
 		Student savedStudent  = studentRepo.save(student);
 		URI location=ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedStudent.getId()).toUri();  
 		return ResponseEntity.created(location).build();  
 	}
 
 	@GetMapping("{studentId}")
-	public Student retrieveStudent(@PathVariable int studentId) {
+	public Student retrieveStudent(@PathVariable @NotBlank int studentId) {
 		return studentService.getStudentByStudentId(studentId);
 	}
 
@@ -59,22 +66,22 @@ public class StudentController {
 	}
 
 	@GetMapping("/gradepoint/{gradePoints}")
-	public List<Student> retrieveByGradePoints(@PathVariable Double gradePoints) {
+	public List<Student> retrieveByGradePoints(@PathVariable BigDecimal gradePoints) {
 		return studentService.getStudentByGradePoints(gradePoints);
 	}
 	
 	@GetMapping("/gradepoint/{start}/{end}")
-	public List<Student> retrieveBetweenGradePoints(@PathVariable("start") Double start, @PathVariable("end") Double end ) {
+	public List<Student> retrieveBetweenGradePoints(@PathVariable("start") BigDecimal start, @PathVariable("end") BigDecimal end ) {
 		return studentService.findByGradePointsBetween(start, end);
 	}
 	
 	@GetMapping("/passportnumber/{passportNumber}")
-	public Student retrieveByPassPortNumber(@PathVariable String passportNumber ) {
+	public Student retrieveByPassPortNumber(@PathVariable @Size(min=6, message="Should be atleast 6 characters") String passportNumber ) {
 		return studentService.findByPassPortNumber(passportNumber);
 	}
 	
 	@DeleteMapping(value="/{studentId}")    
-	public void delete(@PathVariable int studentId){  
+	public void delete(@PathVariable int studentId){ 
 		studentService.deleteStudent(studentId);
 	}    
 	
@@ -84,7 +91,7 @@ public class StudentController {
 	}
 	
 	@GetMapping("/gradepoint/highest/{gradepoint}")
-	public Student findFirstByGradePointsOrderByGradePointsDesc(Double gradePoint) {
+	public Student findFirstByGradePointsOrderByGradePointsDesc(BigDecimal gradePoint) {
 		return studentService.findFirstByGradePointsOrderByGradePointsDesc(gradePoint);
 	}
 

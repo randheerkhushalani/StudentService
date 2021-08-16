@@ -1,5 +1,6 @@
 package com.example.studentservice.repo;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,12 +17,12 @@ public interface StudentRepository extends JpaRepository<Student, Integer>{
 	
 	Optional<Student> findByFirstNameAndLastName(String firstName, String lastName);
 	List<Student> findByFirstName(String firstName);
-	List<Student> findByGradePoints(Double gradePoint);
+	List<Student> findByGradePoints(BigDecimal gradePoint);
 	List<Student> findByFirstNameLike(String namePattern);
 	Optional<Student> findByPassportNumber(String passPortNumber);
-	List<Student> findByGradePointsBetween(Double start, Double end);
-	List<Student> findByGradePointsGreaterThanEqual(Double gradePoint);
-	List<Student> findTop5ByGradePoints(Double gradePoint);
+	List<Student> findByGradePointsBetween(BigDecimal start, BigDecimal end);
+	List<Student> findByGradePointsGreaterThanEqual(BigDecimal gradePoint);
+	List<Student> findTop5ByGradePoints(BigDecimal gradePoint);
 	List<Student> findByPassportNumberStartingWith(String prefix);
-	Student findFirstByGradePointsOrderByGradePointsDesc(Double gradePoint);
+	Student findFirstByGradePointsOrderByGradePointsDesc(BigDecimal gradePoint);
 }
